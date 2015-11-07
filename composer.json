@@ -1,0 +1,27 @@
+{
+    "name": "hamjoint/mustard-commerce",
+    "description": "Commerce support for the Mustard marketplace platform",
+    "keywords": ["mustard", "commerce", "payments"],
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Tom Pitcher",
+            "email": "tom@hamjoint.org"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/hamjoint/mustard/issues",
+        "source": "https://github.com/hamjoint/mustard"
+    },
+    "require": {
+        "hamjoint/mustard": "@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hamjoint\\Mustard\\Commerce\\": "src/lib/"
+        }
+    }
+}
