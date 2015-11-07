@@ -173,6 +173,7 @@ class PurchaseController extends Controller
         }
 
         return view('mustard::purchase.collection-address', [
+            'countries' => Iso3166::all(),
             'purchase' => $purchase,
         ]);
     }

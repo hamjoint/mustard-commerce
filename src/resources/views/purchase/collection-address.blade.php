@@ -19,9 +19,9 @@
                         <label>Where should the item be collected from?
                             <select name="postal_address">
                                 @foreach (\Auth::user()->postalAddresses as $pa)
-                                <option value="{{ $pa->postalAddressId }}">{{ implode(', ', $pa->allParts()) }}</option>
+                                    <option value="{{ $pa->postalAddressId }}">{{ implode(', ', $pa->allParts()) }}</option>
                                 @endforeach
-                                <option value="add">Add a postal address</option>
+                                    <option value="add">Add a postal address</option>
                             </select>
                         </label>
                         <small class="error">Please choose a postal address.</small>
@@ -74,8 +74,8 @@
                     <div class="medium-12 columns">
                         <label>Country
                             <select name="country" required>
-                                @foreach (\Models\Country::orderBy('name')->get() as $country)
-                                <option value="{{ $country->countryId }}" {{ $country->iso3166Alpha2 == 'GB' ? 'selected' : '' }}>{{ $country->name }}</option>
+                                @foreach ($countries as $country)
+                                    <option value="{{ $country->countryId }}" {{ $country->iso3166Alpha2 == 'GB' ? 'selected' : '' }}>{{ $country->name }}</option>
                                 @endforeach
                             </select>
                         </label>

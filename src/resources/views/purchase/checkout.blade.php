@@ -16,11 +16,11 @@
             <div class="row">
                 <div class="medium-6 columns">
                     <ul class="pricing-table">
-                        <li class="price">{{ p($item_total) }}</li>
+                        <li class="price">{{ mustard_price($item_total) }}</li>
                     </ul>
                 </div>
                 <div class="medium-6 columns">
-                    <p>Sold by: {{ u($item->seller) }}</p>
+                    <p>Sold by: @include('mustard::user.link', ['user' => $item->seller])</p>
                 </div>
             </div>
             @if ($item->hasQuantity())
@@ -39,10 +39,10 @@
                         <select name="delivery_option" required>
                             <option></option>
                             @foreach ($item->deliveryOptions as $delivery_option)
-                            <option value="{{ $delivery_option->itemDeliveryOptionId }}" data-price="{{ $delivery_option->price }}">{{ p($delivery_option->price) }}: {{ $delivery_option->name }} ({{ $delivery_option->humanArrivalTime }})</option>
+                                <option value="{{ $delivery_option->itemDeliveryOptionId }}" data-price="{{ $delivery_option->price }}">{{ mustard_price($delivery_option->price) }}: {{ $delivery_option->name }} ({{ $delivery_option->humanArrivalTime }})</option>
                             @endforeach
                             @if ($item->isCollectable())
-                            <option value="collection" data-price="0.00">Free: Collection from {{ $item->collectionLocation }}</option>
+                                <option value="collection" data-price="0.00">Free: Collection from {{ $item->collectionLocation }}</option>
                             @endif
                         </select>
                     </label>
@@ -53,7 +53,7 @@
                         <label>Where should the item be delivered?
                             <select name="postal_address">
                                 @foreach (Auth::user()->postalAddresses as $pa)
-                                <option value="{{ $pa->postalAddressId }}">{{ implode(', ', $pa->allParts()) }}</option>
+                                    <option value="{{ $pa->postalAddressId }}">{{ implode(', ', $pa->allParts()) }}</option>
                                 @endforeach
                                 <option value="add">Add a postal address</option>
                             </select>
@@ -110,7 +110,7 @@
                             <select name="country" required>
                                 <option></option>
                                 @foreach ($countries as $country)
-                                <option value="{{ $country->countryId }}" {{ $country->iso3166Alpha2 == 'GB' ? 'selected' : '' }}>{{ $country->name }}</option>
+                                    <option value="{{ $country->countryId }}" {{ $country->iso3166Alpha2 == 'GB' ? 'selected' : '' }}>{{ $country->name }}</option>
                                 @endforeach
                             </select>
                         </label>
