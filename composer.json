@@ -1,6 +1,6 @@
 {
     "name": "hamjoint/mustard-commerce",
-    "description": "Commerce support for the Mustard marketplace platform",
+    "description": "Commerce support for the Mustard marketplace platform.",
     "keywords": ["mustard", "commerce", "payments"],
     "license": "GPL-3.0",
     "authors": [
