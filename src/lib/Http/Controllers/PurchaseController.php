@@ -24,6 +24,7 @@ namespace Hamjoint\Mustard\Commerce\Http\Controllers;
 use Auth;
 use Hamjoint\Mustard\Commerce\Purchase;
 use Hamjoint\Mustard\Http\Controllers\Controller;
+use Hamjoint\Mustard\Item;
 use Illuminate\Http\Request;
 use Log;
 use Tjbp\Countries\Iso3166;
