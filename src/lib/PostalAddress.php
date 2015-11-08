@@ -21,8 +21,12 @@ along with Mustard.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Hamjoint\Mustard\Commerce;
 
+use Tjbp\Countries\HasCountries;
+
 class PostalAddress extends \Hamjoint\Mustard\Model
 {
+    use HasCountries;
+
     /**
      * The database table used by the model.
      *
@@ -45,5 +49,22 @@ class PostalAddress extends \Hamjoint\Mustard\Model
     public function user()
     {
         return $this->belongsTo('\Hamjoint\Mustard\User');
+    }
+    /**
+     * Return address as a comma-separated string.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return implode(', ', array_filter([
+            $this->name,
+            $this->street1,
+            $this->street2,
+            $this->city,
+            $this->county,
+            $this->postcode,
+            $this->country($this->country)->name,
+        ]));
     }
 }
