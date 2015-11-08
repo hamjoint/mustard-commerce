@@ -24,14 +24,14 @@
                 </div>
             </div>
             @if ($item->hasQuantity())
-            <div class="row">
-                <div class="medium-6 columns">
-                    <label>Choose a quantity
-                        <input type="number" name="quantity" value="1" max="{{ $item->quantity }}" min="1" required />
-                    </label>
-                    <small class="error">Please choose a quantity.</small>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <label>Choose a quantity
+                            <input type="number" name="quantity" value="1" max="{{ $item->quantity }}" min="1" required />
+                        </label>
+                        <small class="error">Please choose a quantity.</small>
+                    </div>
                 </div>
-            </div>
             @endif
             <div class="row">
                 <div class="medium-6 columns">
@@ -53,7 +53,7 @@
                         <label>Where should the item be delivered?
                             <select name="postal_address">
                                 @foreach (Auth::user()->postalAddresses as $pa)
-                                    <option value="{{ $pa->postalAddressId }}">{{ implode(', ', $pa->allParts()) }}</option>
+                                    <option value="{{ $pa->postalAddressId }}">{{ $pa->toString() }}</option>
                                 @endforeach
                                 <option value="add">Add a postal address</option>
                             </select>
@@ -110,7 +110,7 @@
                             <select name="country" required>
                                 <option></option>
                                 @foreach ($countries as $country)
-                                    <option value="{{ $country->countryId }}" {{ $country->iso3166Alpha2 == 'GB' ? 'selected' : '' }}>{{ $country->name }}</option>
+                                    <option value="{{ $country->alpha2 }}" {{ $country->alpha2 == 'GB' ? 'selected' : '' }}>{{ $country->name }}</option>
                                 @endforeach
                             </select>
                         </label>
