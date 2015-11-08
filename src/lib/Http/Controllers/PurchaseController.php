@@ -63,7 +63,7 @@ class PurchaseController extends Controller
         $item = Item::findOrFail($itemId);
 
         if ($item->seller->userId == Auth::user()->userId) {
-            return redirect($item->getUrl())->withMessage('You cannot purchase your own items.');
+            return redirect($item->url)->withMessage('You cannot purchase your own items.');
         }
 
         if ($item->auction && !$item->isActive() && $item->purchases->count()) {
@@ -75,14 +75,21 @@ class PurchaseController extends Controller
             return redirect('/pay/' . $unpaid->purchaseId);
         }
 
-        if (!$item->isActive() && !$item->auction) return redirect($item->getUrl())
-            ->withErrors(['This item has ended.']);
+        if (!$item->isActive() && !$item->auction) {
+            return redirect($item->url)->withErrors([
+                'This item has ended.'
+            ]);
+        }
 
-        if ($item->isActive() && !$item->hasFixed()) return redirect($item->getUrl())
-            ->withErrors(['This auction has no fixed price, so cannot be bought outright.']);
+        if ($item->isActive() && !$item->hasFixed()) {
+            return redirect($item->url)->withErrors([
+                'This auction has no fixed price, so cannot be bought outright.'
+            ]);
+        }
 
-        if (!$item->isActive() && $item->auction && !$item->winningBid) return redirect($item->getUrl())
-            ->withMessage('Please wait while this auction is processed.');
+        if (!$item->isActive() && $item->auction && !$item->winningBid) {
+            return redirect($item->url)->withMessage('Please wait while this auction is processed.');
+        }
 
         return view('mustard::purchase.checkout', [
             'countries' => Iso3166::all(),
@@ -189,7 +196,7 @@ class PurchaseController extends Controller
         $item = Item::findOrFail($request->input('item_id'));
 
         if ($item->seller->userId == Auth::user()->userId) {
-            return redirect($item->getUrl())->withMessage('You cannot purchase your own items.');
+            return redirect($item->url)->withMessage('You cannot purchase your own items.');
         }
 
         // Check for unpaid item
