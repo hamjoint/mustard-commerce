@@ -7,6 +7,7 @@
 @section('content')
     <div class="purchase-collection-address">
         <form method="post" action="/purchase/collection-address" data-abide="true">
+            {!! csrf_field() !!}
             <input type="hidden" name="purchase_id" value="{{ $purchase->purchaseId }}" />
             <div class="row">
                 <div class="medium-12 columns">

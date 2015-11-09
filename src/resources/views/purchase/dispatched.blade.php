@@ -14,6 +14,7 @@
         <div class="row">
             <div class="medium-6 medium-offset-3 columns">
                 <form method="post" action="/purchase/dispatched" data-abide="true">
+                    {!! csrf_field() !!}
                     <input type="hidden" name="purchase_id" value="{{ $purchase->purchaseId }}" />
                     <fieldset>
                         <legend>Delivery details</legend>

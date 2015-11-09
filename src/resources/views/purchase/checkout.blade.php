@@ -7,6 +7,7 @@
 @section('content')
     <div class="purchase-checkout">
         <form method="post" action="/purchase/checkout" data-abide="true">
+            {!! csrf_field() !!}
             <input type="hidden" name="item_id" value="{{ $item->itemId }}" />
             <div class="row">
                 <div class="medium-12 columns">
@@ -37,9 +38,9 @@
                 <div class="medium-6 columns">
                     <label>Choose a delivery option
                         <select name="delivery_option" required>
-                            <option></option>
+                            <option data-price="0.00"></option>
                             @foreach ($item->deliveryOptions as $delivery_option)
-                                <option value="{{ $delivery_option->itemDeliveryOptionId }}" data-price="{{ $delivery_option->price }}">{{ mustard_price($delivery_option->price) }}: {{ $delivery_option->name }} ({{ $delivery_option->humanArrivalTime }})</option>
+                                <option value="{{ $delivery_option->getKey() }}" data-price="{{ $delivery_option->price }}">@include('mustard::fragments.delivery-option')</option>
                             @endforeach
                             @if ($item->isCollectable())
                                 <option value="collection" data-price="0.00">Free: Collection from {{ $item->collectionLocation }}</option>
@@ -129,4 +130,50 @@
             </div>
         </form>
     </div>
+@stop
+
+@section('script')
+    $(function()
+    {
+        $('.purchase-checkout').on('change', function()
+        {
+            var button = $('.purchase-checkout button[type=submit]');
+
+            var quantity_input = $('.purchase-checkout input[name=quantity]');
+
+            var delivery_option = $('.purchase-checkout select[name=delivery_option]');
+
+            var postal_address = $('.purchase-checkout select[name=postal_address]');
+
+            if (postal_address.val() == 'add') {
+                $('.add-postal-address').show();
+            } else {
+                $('.add-postal-address').hide();
+            }
+
+            if (delivery_option.val() == 'collection') {
+                $('.postal-address, .add-postal-address').hide();
+            } else {
+                $('.postal-address').show();
+            }
+
+            if (quantity_input.length) {
+                var quantity = quantity_input.val();
+
+                if (parseInt(quantity) > parseInt(quantity_input.attr('max'))) {
+                    quantity_input.val(quantity_input.attr('max'));
+
+                    quantity = quantity_input.attr('max');
+                }
+            } else {
+                var quantity = 1;
+            }
+
+            var delivery = parseFloat(delivery_option.find(':selected').data('price'));
+
+            var item = parseFloat(button.data('item-price'));
+
+            button.html('Pay total of &pound;' + (delivery + (item * quantity)).toFixed(2));
+        }).triggerHandler('change');
+    });
 @stop
