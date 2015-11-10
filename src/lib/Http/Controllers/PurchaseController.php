@@ -22,7 +22,9 @@ along with Mustard.  If not, see <http://www.gnu.org/licenses/>.
 namespace Hamjoint\Mustard\Commerce\Http\Controllers;
 
 use Auth;
+use Hamjoint\Mustard\Commerce\PostalAddress;
 use Hamjoint\Mustard\Commerce\Purchase;
+use Hamjoint\Mustard\DeliveryOption;
 use Hamjoint\Mustard\Http\Controllers\Controller;
 use Hamjoint\Mustard\Item;
 use Illuminate\Http\Request;
@@ -63,7 +65,9 @@ class PurchaseController extends Controller
         $item = Item::findOrFail($itemId);
 
         if ($item->seller->userId == Auth::user()->userId) {
-            return redirect($item->url)->withMessage('You cannot purchase your own items.');
+            return redirect($item->url)->withMessage(
+                'You cannot purchase your own items.'
+            );
         }
 
         if ($item->auction && !$item->isActive() && $item->purchases->count()) {
@@ -88,7 +92,9 @@ class PurchaseController extends Controller
         }
 
         if (!$item->isActive() && $item->auction && !$item->winningBid) {
-            return redirect($item->url)->withMessage('Please wait while this auction is processed.');
+            return redirect($item->url)->withMessage(
+                'Please wait while this auction is processed.'
+            );
         }
 
         return view('mustard::purchase.checkout', [
@@ -109,14 +115,16 @@ class PurchaseController extends Controller
     {
         $purchase = Purchase::findOrFail($purchaseId);
 
-        if ($purchase->user->userId != Auth::user()->userId) {
+        if ($purchase->buyer->userId != Auth::user()->userId) {
             return redirect('/inventory/bought')->withErrors([
                 "You are not the buyer of this item."
             ]);
         }
 
         if ($purchase->isPaid()) {
-            return redirect('/inventory/bought')->withMessage('You have already successfully paid for this item.');
+            return redirect('/inventory/bought')->withMessage(
+                'You have already successfully paid for this item.'
+            );
         }
 
         return view('mustard::purchase.pay', [
@@ -140,7 +148,9 @@ class PurchaseController extends Controller
         }
 
         if ($purchase->isDispatched()) {
-            return redirect('/inventory/sold')->withMessage('You have already marked this item as dispatched.');
+            return redirect('/inventory/sold')->withMessage(
+                'You have already marked this item as dispatched.'
+            );
         }
 
         if (!$purchase->deliveryOption) {
@@ -170,7 +180,9 @@ class PurchaseController extends Controller
         }
 
         if ($purchase->deliveryOption) {
-            return redirect('/inventory/sold')->withErrors(["This item is not due to be collected."]);
+            return redirect('/inventory/sold')->withErrors([
+                "This item is not due to be collected."
+            ]);
         }
 
         if ($purchase->hasAddress()) {
@@ -254,8 +266,6 @@ class PurchaseController extends Controller
         );
 
         if ($validator->fails()) {
-            self::formFlash(['delivery_option', 'quantity']);
-
             return redirect()->back()->withErrors($validator);
         }
 
@@ -264,10 +274,10 @@ class PurchaseController extends Controller
         $purchase->created = time();
 
         $purchase->item()->associate($item);
-        $purchase->user()->associate(Auth::user());
+        $purchase->buyer()->associate(Auth::user());
 
         if ($request->input('delivery_option') != 'collection') {
-            if (!$delivery_option = ItemDeliveryOption::find($request->input('delivery_option'))) {
+            if (!$delivery_option = DeliveryOption::find($request->input('delivery_option'))) {
                 return redirect()->back()->withErrors(['delivery_option' => 'Please select a valid delivery option.']);
             }
 
@@ -352,7 +362,7 @@ class PurchaseController extends Controller
 
         $purchase->save();
 
-        $purchase->user->sendEmail(
+        $purchase->buyer->sendEmail(
             'Your item has been dispatched',
             'emails.item.dispatched',
             [
@@ -426,7 +436,7 @@ class PurchaseController extends Controller
 
         $purchase->save();
 
-        $purchase->user->sendEmail(
+        $purchase->buyer->sendEmail(
             'Your item is ready for collection',
             'emails.item.collection',
             [
@@ -478,7 +488,7 @@ class PurchaseController extends Controller
                 ]
             );
 
-            $purchase->user->sendEmail(
+            $purchase->buyer->sendEmail(
                 'Receipt for your item',
                 'emails.item.receipt',
                 [
@@ -515,7 +525,7 @@ class PurchaseController extends Controller
 
         $purchase->refundedAmount = $amount;
 
-        $purchase->user->sendEmail(
+        $purchase->buyer->sendEmail(
             'You have been refunded',
             'emails.item.refunded',
             [
@@ -538,7 +548,7 @@ class PurchaseController extends Controller
     {
         Log::info("Payment failed ({$purchase->purchaseId})");
 
-        $purchase->user->sendEmail(
+        $purchase->buyer->sendEmail(
             'Your payment has failed',
             'emails.item.failed',
             [
