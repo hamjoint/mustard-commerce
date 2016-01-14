@@ -72,7 +72,7 @@ class MustardCommerceTables extends Migration
         Schema::create('postal_addresses', function(Blueprint $table)
         {
             $table->integer('postal_address_id', true)->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->char('country', 2);
             $table->string('name', 64);
             $table->string('street1', 64);
@@ -96,6 +96,5 @@ class MustardCommerceTables extends Migration
         Schema::drop('postal_addresses');
         Schema::drop('purchases');
         Schema::drop('bank_details');
-        Schema::drop('delivery_options');
     }
 }
