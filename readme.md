@@ -1,5 +1,12 @@
 ## Mustard Commerce module
 
+[![StyleCI](https://styleci.io/repos/45717240/shield?style=flat)](https://styleci.io/repos/45717240)
+[![Build Status](https://travis-ci.org/hamjoint/mustard-commerce.svg)](https://travis-ci.org/hamjoint/mustard-commerce)
+[![Total Downloads](https://poser.pugx.org/hamjoint/mustard-commerce/d/total.svg)](https://packagist.org/packages/hamjoint/mustard-commerce)
+[![Latest Stable Version](https://poser.pugx.org/hamjoint/mustard-commerce/v/stable.svg)](https://packagist.org/packages/hamjoint/mustard-commerce)
+[![Latest Unstable Version](https://poser.pugx.org/hamjoint/mustard-commerce/v/unstable.svg)](https://packagist.org/packages/hamjoint/mustard-commerce)
+[![License](https://poser.pugx.org/hamjoint/mustard-commerce/license.svg)](https://packagist.org/packages/hamjoint/mustard-commerce)
+
 Commerce support for [Mustard](http://withmustard.org/), the open source marketplace platform.
 
 ### Installation
