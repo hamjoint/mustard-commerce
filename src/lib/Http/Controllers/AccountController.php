@@ -94,7 +94,7 @@ class AccountController extends Controller
 
         $pa->save();
 
-        return redirect('/account/postal-addresses')->withMessage('Postal address added.');
+        return redirect('/account/postal-addresses')->withStatus('Postal address added.');
     }
 
     /**
@@ -120,7 +120,7 @@ class AccountController extends Controller
         $pa->delete();
 
         return redirect('/account/postal-addresses')
-            ->withMessage('Postal address deleted.');
+            ->withStatus('Postal address deleted.');
     }
 
     /**
@@ -156,6 +156,6 @@ class AccountController extends Controller
         );
 
         return redirect('/account/bank-details')
-            ->withMessage('Your bank details have been changed.');
+            ->withStatus('Your bank details have been changed.');
     }
 }

@@ -65,9 +65,9 @@ class PurchaseController extends Controller
         $item = Item::findOrFail($itemId);
 
         if ($item->seller->userId == Auth::user()->userId) {
-            return redirect($item->url)->withMessage(
+            return redirect($item->url)->withErrors([
                 'You cannot purchase your own items.'
-            );
+            ]);
         }
 
         if ($item->auction && !$item->isActive() && $item->purchases->count()) {
@@ -92,7 +92,7 @@ class PurchaseController extends Controller
         }
 
         if (!$item->isActive() && $item->auction && !$item->winningBid) {
-            return redirect($item->url)->withMessage(
+            return redirect($item->url)->withStatus(
                 'Please wait while this auction is processed.'
             );
         }
@@ -122,7 +122,7 @@ class PurchaseController extends Controller
         }
 
         if ($purchase->isPaid()) {
-            return redirect('/inventory/bought')->withMessage(
+            return redirect('/inventory/bought')->withStatus(
                 'You have already successfully paid for this item.'
             );
         }
@@ -148,7 +148,7 @@ class PurchaseController extends Controller
         }
 
         if ($purchase->isDispatched()) {
-            return redirect('/inventory/sold')->withMessage(
+            return redirect('/inventory/sold')->withStatus(
                 'You have already marked this item as dispatched.'
             );
         }
@@ -208,7 +208,7 @@ class PurchaseController extends Controller
         $item = Item::findOrFail($request->input('item_id'));
 
         if ($item->seller->userId == Auth::user()->userId) {
-            return redirect($item->url)->withMessage('You cannot purchase your own items.');
+            return redirect($item->url)->withStatus('You cannot purchase your own items.');
         }
 
         // Check for unpaid item
@@ -373,7 +373,7 @@ class PurchaseController extends Controller
             ]
         );
 
-        return redirect('/inventory/sold')->withMessage("This item has been marked as dispatched and the buyer notified.");
+        return redirect('/inventory/sold')->withStatus("This item has been marked as dispatched and the buyer notified.");
     }
 
     /**
@@ -451,7 +451,7 @@ class PurchaseController extends Controller
             ]
         );
 
-        return redirect('/inventory/sold')->withMessage("Your collection address has been saved and sent to the buyer.");
+        return redirect('/inventory/sold')->withStatus("Your collection address has been saved and sent to the buyer.");
     }
 
     /**
